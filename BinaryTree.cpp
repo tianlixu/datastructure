@@ -28,19 +28,21 @@ public:
         std::queue<TreeNode*> q;
         q.push(root);
         
-//        while (!q.empty()) {
         while (index < m) {
             TreeNode* node = q.front();
+            
             if (strcmp(src[index], "#") != 0) {
                 node->left = new TreeNode(atoi(src[index]));
                 q.push(node->left);
-                index ++;
             }
+            index ++;
+
             if (strcmp(src[index], "#") != 0) {
                 node->right = new TreeNode(atoi(src[index]));
                 q.push(node->right);
-                index ++;
             }
+            index ++;
+
             q.pop();
         }
 
@@ -80,6 +82,7 @@ public:
 int main()
 {
     const char* src[] = {"1", "2", "3", "4", "5", "6", "7"};
+    //const char* src[] = {"1", "2", "3", "#", "#", "6", "7"};
 
     BinaryTree bt;
     TreeNode* root = bt.levelOrderDeserialize(src, 7);
