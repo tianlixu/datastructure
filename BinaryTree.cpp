@@ -18,6 +18,29 @@ class BinaryTree
 {
 public:
     /// in level order
+    std::string levelOrderSerialize(TreeNode* root) {
+        if (root == nullptr)
+            return "#";
+        
+        string s;
+        std::queue<TreeNode*> q;
+        q.push(root);
+        while (!q.empty()) {
+            TreeNode* node = q.front();
+            if (node == nullptr) {
+                s += "# ";
+            } else {
+                s += std::to_string(node->val) + " ";
+                q.push(node->left);
+                q.push(node->right);
+            }
+
+            q.pop();
+        }
+
+        return s;
+    }
+    
     TreeNode* levelOrderDeserialize(const char* src[], int m) {
         if (m == 0)
             return nullptr;
@@ -48,6 +71,9 @@ public:
 
         return root;
     }
+
+
+
 
     void preorderTraversal(TreeNode *root) {
         if (root == nullptr)
@@ -93,8 +119,8 @@ public:
 
 int main()
 {
-    const char* src[] = {"1", "2", "3", "4", "5", "6", "7"};
-    //const char* src[] = {"1", "2", "3", "#", "#", "6", "7"};
+    //const char* src[] = {"1", "2", "3", "4", "5", "6", "7"};
+    const char* src[] = {"1", "2", "3", "#", "#", "6", "7", "#", "#", "#", "#"};
 
     BinaryTree bt;
     TreeNode* root = bt.levelOrderDeserialize(src, 7);
@@ -103,6 +129,10 @@ int main()
 
     bt.levelOrderTraversal(root);
     cout << endl;
+
+    cout << bt.levelOrderSerialize(root) << endl;
+
+
 
     bt.release(root);
     
