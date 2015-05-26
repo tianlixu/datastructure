@@ -77,6 +77,18 @@ public:
             q.pop();
         }
     }
+
+    /*
+     * To free the memory in a tree using postOrder traversal
+     */
+    void release(TreeNode* root) {
+        if (root == nullptr)
+            return;
+
+        release(root->left);
+        release(root->right);
+        delete(root);
+    }
 };
 
 int main()
@@ -92,6 +104,8 @@ int main()
     bt.levelOrderTraversal(root);
     cout << endl;
 
+    bt.release(root);
+    
     return 0;
 }
 
