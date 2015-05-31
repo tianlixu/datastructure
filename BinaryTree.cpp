@@ -6,6 +6,8 @@
 
 using namespace std;
 
+//#define CRLF cout << endl;
+
 // Definition for a binary tree node.
  struct TreeNode {
      int val;
@@ -105,6 +107,9 @@ public:
         }
     }
 
+    /*
+     * zigzag: solution 1 with 2 stacks
+     */
     void zigzagOrderTraversal(TreeNode *root) {
         if (root == nullptr)
             return;
@@ -140,6 +145,76 @@ public:
         }
     }
 
+    /*
+     * zigzag traversal, solution 2 with 2 stacks and recursion
+     */
+    void zigzagOrderTraversal2(TreeNode* root) {
+        if (root == nullptr)
+            return;
+        
+        std::stack<TreeNode*> thisLevel;
+        std::stack<TreeNode*> nextLevel;
+
+        thisLevel.push(root);
+        zigzagOrderTraversal2Recursive(thisLevel, nextLevel, true);
+    }
+    
+    void zigzagOrderTraversal2Recursive(std::stack<TreeNode*> thisLevel, std::stack<TreeNode*> nextLevel, bool isLeftToRight) {
+        while (!thisLevel.empty()) {
+            TreeNode* node = thisLevel.top();
+            // visit node
+            cout << node->val << " ";
+
+            if (isLeftToRight) {
+                if (node->left != nullptr)
+                    nextLevel.push(node->left);
+                if (node->right != nullptr)
+                    nextLevel.push(node->right);
+            } else {
+                if (node->right != nullptr)
+                    nextLevel.push(node->right);
+                if (node->left != nullptr)
+                    nextLevel.push(node->left);
+            }
+
+            thisLevel.pop();
+        }
+
+        if (!nextLevel.empty())
+            zigzagOrderTraversal2Recursive(nextLevel, thisLevel, !isLeftToRight);
+    }
+    
+public:
+    /*
+     * zigzag traversal, solution 2(recursive), Time: O(n^2)
+     */
+    void zigzagOrderTraversal3(TreeNode* root) {
+        int height = this->height(root);
+        for (int i=0; i<= height; i++) {
+            printLevel(root, i, i%2 == 0);
+        }
+    }
+private:
+    void printLevel(TreeNode* root, int height, bool isLeftToRight) {
+        if (root == nullptr)
+            return;
+
+        if (height == 0)
+            cout << root->val << " ";
+
+        if (height > 0) {
+            if (isLeftToRight) {
+                printLevel(root->left, height-1, isLeftToRight);
+                printLevel(root->right, height-1, isLeftToRight);                
+            } else {
+                printLevel(root->right, height-1, isLeftToRight);
+                printLevel(root->left, height-1, isLeftToRight);
+            }
+        }
+    }
+
+
+public:    
     /*
      * height: Number of edges in longest path from root to a leaf node
      */
@@ -180,7 +255,17 @@ int main()
 
 
     /// test zigzag
+    cout << "zigzag with 2 stacks: " << endl;
     bt.zigzagOrderTraversal(root);
+
+    cout << "zigzag with 2 stacks and recursion:" << endl;
+    bt.zigzagOrderTraversal2(root);
+    cout << endl;
+
+    cout << "zigzag with recursive: " << endl;
+    bt.zigzagOrderTraversal3(root);
+    cout << endl;
+    
 
     /// height
     cout << "height=" << bt.height(root) << endl;
