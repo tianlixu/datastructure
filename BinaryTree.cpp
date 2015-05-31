@@ -1,5 +1,6 @@
 #include <iostream>
 #include <queue>
+#include <stack>
 #include <string>
 #include <cstdlib>
 
@@ -73,7 +74,7 @@ public:
     }
 
 
-
+    /// Traversal: preorder, inorder, postorder, level order, zigzag order
 
     void preorderTraversal(TreeNode *root) {
         if (root == nullptr)
@@ -101,6 +102,41 @@ public:
                 q.push(node->right);
             
             q.pop();
+        }
+    }
+
+    void zigzagOrderTraversal(TreeNode *root) {
+        if (root == nullptr)
+            return;
+
+        bool isLeftToRight = true;
+        std::stack<TreeNode*> thisLevel;
+        std::stack<TreeNode*> nextLevel;
+
+        thisLevel.push(root);
+        while (!thisLevel.empty()) {
+            TreeNode* node = thisLevel.top();
+            // visit node
+            cout << node->val << " ";
+
+            if (isLeftToRight) {
+                if (node->left != nullptr)
+                    nextLevel.push(node->left);
+                if (node->right != nullptr)
+                    nextLevel.push(node->right);
+            } else {
+                if (node->right != nullptr)
+                    nextLevel.push(node->right);
+                if (node->left != nullptr)
+                    nextLevel.push(node->left);
+            }
+
+            thisLevel.pop();
+            if (thisLevel.empty()) {
+                isLeftToRight = !isLeftToRight;
+                std::swap(thisLevel, nextLevel);
+                cout << endl;
+            }
         }
     }
 
@@ -132,6 +168,9 @@ int main()
 
     cout << bt.levelOrderSerialize(root) << endl;
 
+
+    /// test zigzag
+    bt.zigzagOrderTraversal(root);
 
 
     bt.release(root);
