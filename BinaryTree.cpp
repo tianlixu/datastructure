@@ -141,6 +141,16 @@ public:
     }
 
     /*
+     * height: Number of edges in longest path from root to a leaf node
+     */
+    int height(TreeNode* root) {
+        if (root == nullptr)
+            return -1;
+        else
+            return std::max(height(root->left), height(root->right)) + 1;
+    }
+
+    /*
      * To free the memory in a tree using postOrder traversal
      */
     void release(TreeNode* root) {
@@ -172,6 +182,8 @@ int main()
     /// test zigzag
     bt.zigzagOrderTraversal(root);
 
+    /// height
+    cout << "height=" << bt.height(root) << endl;
 
     bt.release(root);
     
