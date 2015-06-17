@@ -225,6 +225,86 @@ public:
             return std::max(height(root->left), height(root->right)) + 1;
     }
 
+
+public:
+    /*
+     * Number of nodes, recursive solution
+     */
+    int numberOfNodes(TreeNode* root) {
+        if (root == nullptr)
+            return 0;
+
+        return 1 + numberOfNodes(root->left) + numberOfNodes(root->right);
+    }
+    /*
+     * Number of nodes, using stack
+     */
+    int numberOfNodesWithStack(TreeNode* root) {
+        if (root == nullptr)
+            return 0;
+
+        std::stack<TreeNode*> stk;
+        stk.push(root);
+        int count = 0;
+        
+        while (!stk.empty()) {
+            TreeNode* node = stk.top();
+            count ++;
+            stk.pop();
+            
+            if (node->left != nullptr)
+                stk.push(node->left);
+            if (node->right != nullptr)
+                stk.push(node->right);
+        }
+
+        return count;
+    }
+
+
+    /*
+     * Number of leaf nodes, recursive
+     */
+    int numberOfLeafNodes(TreeNode* root) {
+        if (root == nullptr)
+            return 0;
+
+        if (root->left == nullptr && root->right == nullptr)
+            return 1;
+
+        return numberOfLeafNodes(root->left) + numberOfLeafNodes(root->right);
+    }
+    /*
+     * Number of leaf nodes, using stack
+     */
+    int numberOfLeafNodesWithStack(TreeNode* root) {
+        if (root == nullptr)
+            return 0;
+
+        std::stack<TreeNode*> stk;
+        stk.push(root);
+        int count = 0;
+
+        while (!stk.empty()) {
+            TreeNode* node = stk.top();
+            stk.pop();
+            
+            if (node->left == nullptr && node->right == nullptr) {
+                count ++;
+                continue;
+            }
+
+            if (node->left != nullptr)
+                stk.push(node->left);
+            if (node->right != nullptr)
+                stk.push(node->right);
+        }
+
+        return count;
+    }
+    
+    
+
     /*
      * To free the memory in a tree using postOrder traversal
      */
@@ -269,6 +349,16 @@ int main()
 
     /// height
     cout << "height=" << bt.height(root) << endl;
+
+    /// test number of nodes
+    cout << "number of nodes(Recursive):" << bt.numberOfNodes(root) << endl;
+    cout << "number of nodes(Stack):" << bt.numberOfNodesWithStack(root) << endl;
+
+
+    // test number of leaf nodes
+    cout << "number of leaf nodes(Recursive):" << bt.numberOfLeafNodes(root) << endl;
+    cout << "number of leaf nodes(Stack):" << bt.numberOfLeafNodesWithStack(root) << endl;
+
 
     bt.release(root);
     
